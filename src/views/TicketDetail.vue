@@ -60,11 +60,13 @@
         <form name="form" class="needs-validation" @submit.prevent="handleCrateTicket" novalidate="">
         <div class=" form-group mb-3">
         <label class="StatusTicket">Статус</label>
-          <multi-select  id="StatusTicket" v-model="ticket.status" :options="statusList" :searchable="false" :close-on-select="true" :show-labels="false" placeholder="Выбери статус" :disabled="statusSwitchDisable"></multi-select>
+          <multi-select id="StatusTicket" v-model="ticket.status" :options="statusList" :searchable="false"
+                        :close-on-select="true" :show-labels="false" placeholder="Выбери статус"
+                        :disabled="statusSwitchDisable"/>
         </div>
         <div class=" form-group mb-3">
 
-            <label for="title">Название <span class="text-muted"></span></label>
+            <label for="title">Название <span class="text-muted"/></label>
             <input  :disabled="lockFieldTicketTitleAndDesc"
                     v-model="ticket.title"
                     type="text"
@@ -747,6 +749,12 @@
             this.statusSwitchDisable = true;
             this.lockFieldTicketTitleAndDesc = true;
           }
+          if(this.ticket.sender_id.length > 10){
+            this.lockFieldTicketTitleAndDesc = true;
+          }
+          if(this.ticket.sender_id === this.currentUser.id){
+            this.loading = true;
+          }
         });
       }
     },
@@ -782,7 +790,11 @@
     },
     created() {
       if(this.$route.params.id === "-1" ) {
-        this.statusSwitchDisable = true;}
+        this.statusSwitchDisable = true;
+
+      }
+
+
       // else if(this.currentUser.typeUser === 'client'){
       //     this.statusSwitchDisable = true;
       //     this.refreshTicketDetails();
@@ -795,6 +807,7 @@
         this.currentUser = data;
 
         if(this.currentUser.typeUser === 'client'){
+
           this.statusSwitchDisable = true;
           this.lockButtonSender = true;
           this.lockButtonRecipient = true;

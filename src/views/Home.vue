@@ -49,9 +49,9 @@
 <script>
 /* eslint-disable */
 import UserService from "../services/user.service";
-import CourseService from "../services/course.service";
+import TicketService from "../services/ticket.service";
 import { User } from "../models/user";
-import { Transaction } from "../models/transaction";
+import { Ticket } from "../models/tickets";
 
 export default {
 
@@ -75,22 +75,15 @@ export default {
       }
     });
 
-
-    // CourseService.findAllCourses().then(data => {
-    //   this.courses = data.data;
-    // });
-    // UserService.findAllUsers().then(data => {
-    //   this.users = data.data;
-    // });
   },
   methods: {
-    enroll(course) {
+    enroll(ticket) {
       if (!this.currentUser) {
         this.$store.dispatch("error", "You should sign in to enroll a course.");
         return;
       }
-      let transaction = new Transaction(this.currentUser.id, course);
-      CourseService.createTransaction(transaction).then(
+      let transaction = new Ticket(this.currentUser.id, ticket);
+      TicketService.update(transaction).then(
         data => {
           //You can get warning, if you don't use paremeters.
           console.log(data);
